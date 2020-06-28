@@ -8,7 +8,12 @@
         </div>
         <div class="actions">
           <img class="upload" src="@/assets/icons/upload.png" alt />
-          <img @click="goSearch" class="search" src="@/assets/icons/search.png" alt />
+          <img
+            @click="goSearch"
+            class="search"
+            src="@/assets/icons/search.png"
+            alt
+          />
           <img class="avatar" src="@/assets/icons/sort.png" alt />
         </div>
       </div>
@@ -40,6 +45,7 @@ export default {
   align-items: center;
   justify-content: space-between;
   box-shadow: 0 1px 12px -6px black;
+  margin-bottom: 5px;
 }
 .maincomponent {
   display: flex;

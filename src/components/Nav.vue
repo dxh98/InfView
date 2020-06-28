@@ -11,7 +11,7 @@
       </li>
       <li @click="tabpage(2, 'HotList')">
         <img :src="hotlisticon" alt />
-        <span :class="{ active: isSel == 2 }">热度榜</span>
+        <span :class="{ active: isSel == 2 }">榜单</span>
       </li>
       <li @click="tabpage(3, 'Informations')">
         <img :src="informationsicon" alt />
