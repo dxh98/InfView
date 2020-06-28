@@ -52,9 +52,7 @@ export default {
   },
   methods: {
     onChange(index) {
-      // console.log({ type: "primary", message: index });
       this.catName = this.categoryList[index];
-      console.log(this.catName);
     },
   },
 };

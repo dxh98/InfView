@@ -1,14 +1,18 @@
 <template>
   <div class="tv">
     <TopBar />
-    <van-tabs v-model="active">
+    <van-tabs v-model="active" animated swipeable>
       <!-- 热度榜 -->
       <van-tab class="hotlist" title="热度榜">
         <van-grid :column-num="3" :gutter="0.5" :border="false">
-          <van-grid-item v-for="(item, index) in HotMovies" :key="index" to="">
+          <van-grid-item
+            v-for="(item, index) in HotMovies"
+            :key="index"
+            @click="toDetail(item._id)"
+          >
             <van-image class="hotcoverImage" :src="item.coverImage" />
             <h1>{{ item.name | spliceStr(6) }}</h1>
-            <h1>{{ item.tag | spliceStr(8) }}</h1>
+            <h1>{{ item.tag | spliceStr(6) }}</h1>
           </van-grid-item>
         </van-grid>
       </van-tab>
@@ -18,11 +22,11 @@
           <van-grid-item
             v-for="(item, index) in ScoreMovies"
             :key="index"
-            to=""
+            @click="toDetail(item._id)"
           >
             <van-image class="scorecoverImage" :src="item.coverImage" />
-            <h1>{{ item.name | spliceStr(5) }}</h1>
-            <h1>{{ item.tag | spliceStr(8) }}</h1>
+            <h1>{{ item.name | spliceStr(6) }}</h1>
+            <h1>{{ item.tag | spliceStr(6) }}</h1>
           </van-grid-item>
         </van-grid>
       </van-tab>
@@ -51,7 +55,11 @@ export default {
   components: {
     TopBar
   },
-  methods: {},
+  methods: {
+    toDetail(id) {
+      this.$router.push({ name: "MovieDetail", query: { id } });
+    },
+  },
   created(){
     Movies(30,1,"views").then(res=>{
       this.HotMovies = res.data.list
@@ -69,7 +77,7 @@ export default {
 }
 .hotlist h1:nth-child(2) {
   padding-top: 20px;
-  font-size: 28px;
+  font-size: 30px;
 }
 .hotlist h1:nth-child(3) {
   font-size: 11px;
@@ -81,7 +89,7 @@ export default {
 }
 .scorelist h1:nth-child(2) {
   padding-top: 20px;
-  font-size: 28px;
+  font-size: 30px;
 }
 .scorelist h1:nth-child(3) {
   font-size: 11px;

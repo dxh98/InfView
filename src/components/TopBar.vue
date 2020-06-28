@@ -14,7 +14,12 @@
             src="@/assets/icons/search.png"
             alt
           />
-          <img class="avatar" src="@/assets/icons/sort.png" alt />
+          <img
+            @click="goUser"
+            class="avatar"
+            src="@/assets/icons/sort.png"
+            alt
+          />
         </div>
       </div>
     </van-sticky>
@@ -31,6 +36,9 @@ export default {
   methods: {
     goSearch() {
       this.$router.push({ name: "Search" });
+    },
+    goUser(){
+      this.$router.push({ name: "User" });
     }
   }
 };

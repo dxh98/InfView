@@ -1,6 +1,9 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
+import {
+  isLogined
+} from "../utils/auth"
 
 Vue.use(VueRouter);
 
@@ -39,6 +42,9 @@ const routes = [{
     path: "/user",
     name: "User",
     component: () => import("../views/User.vue"),
+    meta: {
+      needLogin: true,
+    },
   },
   {
     path: "/login",
@@ -64,6 +70,22 @@ const routes = [{
       hideNav: true,
     },
   },
+  {
+    path: "/moviedetail",
+    name: "MovieDetail",
+    component: () => import("../views/MovieDetail.vue"),
+    meta: {
+      hideNav: true,
+    },
+  },
+  {
+    path: "/videoplay",
+    name: "VideoPlay",
+    component: () => import("../views/VideoPlay.vue"),
+    meta: {
+      hideNav: true,
+    },
+  },
 ];
 
 const router = new VueRouter({
@@ -76,9 +98,12 @@ router.beforeEach((to, from, next) => {
     if (isLogined()) {
       next();
     } else {
-      next({
-        name: "Login",
-      });
+      if (confirm("您还未登录，是否前往登录？")) {
+        next({
+          name: "Login",
+        });
+      }
+
     }
   } else {
     next();

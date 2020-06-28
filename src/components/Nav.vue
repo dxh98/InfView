@@ -103,7 +103,7 @@ export default {
 <style scoped>
 .nav {
   width: 100%;
-  height: 110px;
+  height: 120px;
   overflow: hidden;
 }
 .nav ul {

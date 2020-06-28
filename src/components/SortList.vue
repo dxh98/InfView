@@ -1,10 +1,14 @@
 <template>
   <div class="sortlist">
     <van-grid :column-num="2">
-      <van-grid-item v-for="(item, index) in Movies" :key="index">
+      <van-grid-item
+        v-for="(item, index) in Movies"
+        :key="index"
+        @click="toDetail(item._id)"
+      >
         <van-image class="coverImage" :src="item.coverImage" />
-        <h1>{{ item.name | spliceStr(8) }}</h1>
-        <h1>{{ item.tag | spliceStr(10) }}</h1>
+        <h1>{{ item.name | spliceStr(7) }}</h1>
+        <h1>{{ item.tag | spliceStr(7) }}</h1>
       </van-grid-item>
     </van-grid>
   </div>
@@ -31,7 +35,6 @@ export default {
         if(newVal){
           Movies(20,1,"_id",newVal).then(res=>{
             this.Movies = res.data.list
-            console.log(this.Movies)
           })
         }
       },
@@ -39,11 +42,14 @@ export default {
     }
     },
     components: {},
-    methods: {},
+    methods: {
+      toDetail(id) {
+        this.$router.push({ name: "MovieDetail", query: { id } });
+      },
+    },
     created(){
       Movies(20,1,"_id",this.catName).then(res=>{
             this.Movies = res.data.list
-            console.log(this.Movies)
           })
     }
 }
@@ -51,7 +57,7 @@ export default {
 
 <style scoped>
 .coverImage {
-  width: 240px;
+  width: 237px;
   height: 320px;
 }
 .sortlist h1:nth-child(2) {

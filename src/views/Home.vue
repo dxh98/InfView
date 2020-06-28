@@ -13,11 +13,11 @@
           <van-grid-item
             v-for="(item, index) in hotlistmovies"
             :key="index"
-            to=""
+            @click="toDetail(item._id)"
           >
             <van-image :src="item.coverImage" />
-            <h1>{{ item.name | spliceStr(5) }}</h1>
-            <h1>{{ item.tag | spliceStr(8) }}</h1>
+            <h1>{{ item.name | spliceStr(6) }}</h1>
+            <h1>{{ item.tag | spliceStr(6) }}</h1>
           </van-grid-item>
         </van-grid>
       </div>
@@ -31,13 +31,13 @@
       <div class="scorelist-bottom">
         <van-grid :column-num="3" :gutter="0.5" :border="false">
           <van-grid-item
+            @click="toDetail(item._id)"
             v-for="(item, index) in scorelistmovies"
             :key="index"
-            to=""
           >
             <van-image :src="item.coverImage" />
-            <h1>{{ item.name | spliceStr(5) }}</h1>
-            <h1>{{ item.tag | spliceStr(8) }}</h1>
+            <h1>{{ item.name | spliceStr(6) }}</h1>
+            <h1>{{ item.tag | spliceStr(6) }}</h1>
           </van-grid-item>
         </van-grid>
       </div>
@@ -53,11 +53,11 @@
           <van-grid-item
             v-for="(item, index) in guesslikemovies"
             :key="index"
-            to=""
+            @click="toDetail(item._id)"
           >
             <van-image :src="item.coverImage" />
-            <h1>{{ item.name | spliceStr(5) }}</h1>
-            <h1>{{ item.tag | spliceStr(8) }}</h1>
+            <h1>{{ item.name | spliceStr(6) }}</h1>
+            <h1>{{ item.tag | spliceStr(6) }}</h1>
           </van-grid-item>
         </van-grid>
       </div>
@@ -93,21 +93,21 @@ export default {
   methods: {
     getHotListData() {
       Movies(3, 1, "views").then((res) => {
-        console.log(res);
         this.hotlistmovies = res.data.list;
       });
     },
     getScoreListData() {
       Movies(3, 1, "score").then((res) => {
-        console.log(res);
         this.scorelistmovies = res.data.list;
       });
     },
     getData() {
       Movies(30, 1, "_id").then((res) => {
-        console.log(res);
         this.guesslikemovies = res.data.list;
       });
+    },
+    toDetail(id) {
+      this.$router.push({ name: "MovieDetail", query: { id } });
     },
   },
   computed: {},
@@ -123,18 +123,20 @@ export default {
 .hotlist-top {
   display: flex;
   align-items: center;
-  margin: 20px 30px 0 20px;
+  margin: 0 30px 0 20px;
   justify-content: space-between;
 }
 .hotlist-top h1:nth-child(1) {
   font-weight: bolder;
+  margin: 30px 0 10px 0;
 }
 .hotlist-top h1:nth-child(2) {
   font-size: 20px;
+  margin: 30px 0 10px 0;
 }
 .hotlist-bottom h1:nth-child(2) {
   padding-top: 20px;
-  font-size: 28px;
+  font-size: 30px;
 }
 .hotlist h1:nth-child(3) {
   font-size: 11px;
@@ -145,18 +147,20 @@ export default {
 .scorelist-top {
   display: flex;
   align-items: center;
-  margin: 20px 30px 0 20px;
+  margin: 0 30px 0 20px;
   justify-content: space-between;
 }
 .scorelist-top h1:nth-child(1) {
+  margin: 15px 0 15px 0;
   font-weight: bolder;
 }
 .scorelist-top h1:nth-child(2) {
+  margin: 15px 0 15px 0;
   font-size: 20px;
 }
 .scorelist-bottom h1:nth-child(2) {
   padding-top: 20px;
-  font-size: 28px;
+  font-size: 30px;
 }
 .scorelist h1:nth-child(3) {
   font-size: 11px;
@@ -171,17 +175,19 @@ export default {
   justify-content: space-between;
 }
 .guesslike-top h1:nth-child(1) {
+  margin: 15px 0 15px 0;
   font-weight: bolder;
 }
 .guesslike-top h1:nth-child(2) {
+  margin: 15px 0 15px 0;
   font-size: 20px;
 }
 .guesslike-bottom h1:nth-child(2) {
   padding-top: 20px;
-  font-size: 28px;
+  font-size: 30px;
 }
 .guesslike h1:nth-child(3) {
-  font-size: 11px;
+  font-size: 12px;
   padding-top: 20px;
   color: #707070;
 }
