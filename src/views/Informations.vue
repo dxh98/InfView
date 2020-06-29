@@ -2,7 +2,7 @@
   <div class="informations">
     <TopBar />
 
-    <div class="singlemessage" v-for="item in movies" :key="item.index">
+    <div class="singlemessage" v-for="item in movies" @click="toDetail(item._id)" :key="item.index">
       <img :src="item.coverImage" alt />
       <h1>
         <h1>
@@ -51,6 +51,9 @@ export default {
         }
         this.randomindex.push(str);
       }
+    },
+    toDetail(id) {
+      this.$router.push({ name: "MovieDetail", query: { id } });
     }
   },
   async mounted() {
@@ -59,7 +62,6 @@ export default {
         this.movies.push(res.data.list[this.randomindex[i]]);
       }
     });
-    console.log(this.movies);
   },
   created() {
     this.getIndex();
