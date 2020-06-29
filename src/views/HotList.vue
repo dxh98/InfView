@@ -1,5 +1,5 @@
 <template>
-  <div class="tv">
+  <div class="tv" ref="viewbox">
     <TopBar />
     <van-tabs v-model="active" animated swipeable>
       <!-- 热度榜 -->
@@ -42,7 +42,9 @@ export default {
   name: "Tv",
   data() {
     return {
-      active: 2,
+      hotpage: 1,
+      scorepage: 1,
+      active: 0,
       HotMovies: [],
       ScoreMovies: []
     };
@@ -52,8 +54,57 @@ export default {
       return str.length > n ? str.substr(0, n) + "..." : str;
     }
   },
+  watch: {
+    // 监听榜单切换,重置数据并回到顶部
+    active: function(newVal, oldVel) {
+      if (oldVel == 1 && newVal == 0) {
+        this.hotpage = 1;
+        Movies(30, this.hotpage, "views").then(res => {
+          this.HotMovies = res.data.list;
+          this.hotpage++;
+        });
+        this.$refs.viewbox.scrollTop = 0;
+      }
+      if (oldVel == 0 && newVal == 1) {
+        this.scorepage = 1;
+        Movies(30, this.scorepage, "score").then(res => {
+          this.ScoreMovies = res.data.list;
+          this.scorepage++;
+        });
+        this.$refs.viewbox.scrollTop = 0;
+      }
+    },
+    deep: true
+  },
   components: {
     TopBar
+  },
+  mounted() {
+    // 监听ref标识元素内部滚动条滚动高度
+    this.box = this.$refs.viewbox;
+    this.box.addEventListener(
+      "scroll",
+      () => {
+        if (
+          this.$refs.viewbox.scrollTop + this.$refs.viewbox.clientHeight ==
+          this.$refs.viewbox.scrollHeight
+        ) {
+          if (this.active == 0) {
+            Movies(30, this.hotpage, "views").then(res => {
+              this.HotMovies = [...this.HotMovies, ...res.data.list];
+              this.hotpage++;
+            });
+          }
+          if (this.active == 1) {
+            Movies(30, this.scorepage, "score").then(res => {
+              this.ScoreMovies = [...this.ScoreMovies, ...res.data.list];
+              this.scorepage++;
+            });
+          }
+        }
+      },
+      true
+    );
   },
   methods: {
     toDetail(id) {
@@ -61,11 +112,13 @@ export default {
     }
   },
   created() {
-    Movies(30, 1, "views").then(res => {
+    Movies(30, this.hotpage, "views").then(res => {
       this.HotMovies = res.data.list;
+      this.hotpage++;
     });
-    Movies(30, 1, "score").then(res => {
+    Movies(30, this.scorepage, "score").then(res => {
       this.ScoreMovies = res.data.list;
+      this.scorepage++;
     });
     if (this.$route.query.active) {
       this.active = this.$route.query.active;

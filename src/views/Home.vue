@@ -79,7 +79,6 @@ export default {
       hotlistmovies: [],
       scorelistmovies: [],
       guesslikemovies: [],
-      pages: 1,
       page: 1
     };
   },

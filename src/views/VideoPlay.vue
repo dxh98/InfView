@@ -34,7 +34,6 @@ export default {
   created() {
     this.name = this.$route.query.name;
     this.playUrl = this.$route.query.url;
-    console.log(this.playUrl);
   }
 };
 </script>

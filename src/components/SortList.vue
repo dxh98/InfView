@@ -35,7 +35,6 @@ export default {
           this.$refs.viewbox.scrollTop = 0;
           this.page = 1;
           Movies(20, this.page, "views", newVal).then(res => {
-            console.log(res);
             this.Movies = res.data.list;
           });
         }
@@ -54,7 +53,6 @@ export default {
           this.$refs.viewbox.scrollHeight - this.page
         ) {
           Movies(20, this.page, "views", this.catName).then(res => {
-            console.log(res);
             this.Movies = [...this.Movies, ...res.data.list];
             this.page++;
           });
@@ -70,7 +68,6 @@ export default {
   },
   created() {
     Movies(20, this.page, "views", this.catName).then(res => {
-      console.log(res);
       this.Movies = res.data.list;
       this.page++;
     });
