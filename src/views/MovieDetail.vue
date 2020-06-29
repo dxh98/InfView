@@ -1,27 +1,16 @@
 <template>
   <div class="moviedetail">
-    <van-nav-bar
-      fixed
-      placeholder
-      class="topbar"
-      title="详情"
-      left-arrow
-      @click-left="onClickLeft"
-    />
+    <van-nav-bar fixed placeholder class="topbar" title="详情" left-arrow @click-left="onClickLeft" />
     <!-- 带背景颜色的部分 -->
-    <div class="moviedetail-main" :style="{ background: `${this.bgcolor}` }">
+    <div class="moviedetail-main">
       <div class="moviedetail-top">
-        <img :src="this.moviedata.coverImage" alt="" />
+        <img :src="this.moviedata.coverImage" alt />
         <div class="movieinfo">
           <h1>{{ this.moviedata.name }}</h1>
-          <span v-for="item in this.moviedata.mainActors" :key="item.index">
-            {{ item }}&nbsp;/&nbsp;
-          </span>
+          <span v-for="item in this.moviedata.mainActors" :key="item.index">{{ item }}&nbsp;/&nbsp;</span>
           <span>{{ this.moviedata.releaseTime }}上映</span>
           <h1>
-            <span v-for="item in this.moviedata.category" :key="item.index">
-              {{ item }}&nbsp;/&nbsp;
-            </span>
+            <span v-for="item in this.moviedata.category" :key="item.index">{{ item }}&nbsp;/&nbsp;</span>
             <span>{{ this.moviedata.views }}次观看</span>
           </h1>
           <h1 class="duration">时长&nbsp;{{ this.moviedata.duration }}</h1>
@@ -32,9 +21,7 @@
       <div class="score">
         <h1>电影评分</h1>
         <div>
-          <h1>
-            {{ this.score }}
-          </h1>
+          <h1>{{ this.score }}</h1>
           <h1>
             <van-rate :size="10" allow-half v-model="value" readonly />
             <h1>{{ this.scorenumber }}人评分</h1>
@@ -42,16 +29,8 @@
         </div>
       </div>
       <div class="action">
-        <van-button
-          hairline
-          icon="play-circle-o"
-          :color="this.bgcolor"
-          @click="toPlay"
-          >立即播放</van-button
-        >
-        <van-button hairline icon="like-o" :color="this.bgcolor"
-          >立即收藏</van-button
-        >
+        <van-button hairline icon="play-circle-o" color="#841703" @click="toPlay">立即播放</van-button>
+        <van-button hairline icon="like-o" color="#841703">立即收藏</van-button>
       </div>
     </div>
 
@@ -62,54 +41,60 @@
 </template>
 
 <script type="text/ecmascript-6">
-import { getOneMovie } from '../service/Movies'
+import { getOneMovie } from "../service/Movies";
+import { isLogined } from "../utils/auth";
 export default {
-    name: "MovieDetail",
-    data() {
-        return {
-          moviedata:'',
-          bgcolor:'',
-          value:0,
-          score:0,
-          scorenumber:0
-        }
-    },
-    components: {
-    },
-    methods: {
-      onClickLeft() {
+  name: "MovieDetail",
+  data() {
+    return {
+      moviedata: "",
+      bgcolor: "",
+      value: 0,
+      score: 0,
+      scorenumber: 0
+    };
+  },
+  components: {},
+  methods: {
+    onClickLeft() {
       this.$router.go(-1);
-      },
-      toPlay(){
-        this.$router.push({name:"VideoPlay",query:{url:this.moviedata.playUrl,name:this.moviedata.name} })
-      },
-      getbgcolor(){
-        let R = Math.ceil(Math.random()*80)
-        let G = Math.ceil(Math.random()*80)
-        let B = Math.ceil(Math.random()*80)
-        let A = 0.9
-        this.bgcolor = "rgb("+R+','+G+','+B+','+A+")"
-      }
     },
-    created(){
-      getOneMovie(this.$route.query.id).then(res=>{
-        this.moviedata = res.data.data
-        this.value = res.data.data.score/2
-        this.score = res.data.data.score.toFixed(1)
-        this.scorenumber = Math.ceil(res.data.data.views/3*2)
-        console.log(this.moviedata)
-      })
-      this.getbgcolor()
+    toPlay() {
+      this.$router.push({
+        name: "VideoPlay",
+        query: { url: this.moviedata.playUrl, name: this.moviedata.name }
+      });
+    },
+    getbgcolor() {
+      let R = Math.ceil(Math.random() * 80);
+      let G = Math.ceil(Math.random() * 80);
+      let B = Math.ceil(Math.random() * 80);
+      let A = 0.9;
+      this.bgcolor = "rgb(" + R + "," + G + "," + B + "," + A + ")";
+      this.styleObj = "background:" + this.bgcolor;
     }
-}
+  },
+  created() {
+    getOneMovie(this.$route.query.id).then(res => {
+      this.moviedata = res.data.data;
+      this.value = res.data.data.score / 2;
+      this.score = res.data.data.score.toFixed(1);
+      this.scorenumber = Math.ceil((res.data.data.views / 3) * 2);
+    });
+  }
+};
 </script>
 
 <style scoped>
+.moviedetail {
+  background: #e6e6e6;
+}
 .topbar {
   box-shadow: 0 1px 12px -6px black;
 }
 .moviedetail-main {
   overflow: hidden;
+  background: #931a04;
 }
 .moviedetail-top {
   display: flex;

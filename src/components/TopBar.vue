@@ -8,18 +8,8 @@
         </div>
         <div class="actions">
           <img class="upload" src="@/assets/icons/upload.png" alt />
-          <img
-            @click="goSearch"
-            class="search"
-            src="@/assets/icons/search.png"
-            alt
-          />
-          <img
-            @click="goUser"
-            class="avatar"
-            src="@/assets/icons/sort.png"
-            alt
-          />
+          <img @click="goSearch" class="search" src="@/assets/icons/search.png" alt />
+          <img @click="goUser" class="avatar" :src="this.avatars" alt />
         </div>
       </div>
     </van-sticky>
@@ -27,19 +17,44 @@
 </template>
 
 <script type="text/ecmascript-6">
+import { isLogined, getToken } from "../utils/auth";
+import { get } from "../utils/request";
 export default {
   name: "topbar",
   data() {
-    return {};
+    return {
+      show: false,
+      avatars: require("@/assets/icons/mediabox.png")
+    };
   },
   components: {},
   methods: {
+    showPopup() {
+      this.show = true;
+    },
     goSearch() {
       this.$router.push({ name: "Search" });
     },
-    goUser(){
+    goUser() {
       this.$router.push({ name: "User" });
+    },
+    User() {
+      get("/api/v1/userinfo", {
+        headers: {
+          Authorization: "Beaer " + getToken()
+        }
+      }).then(res => {
+        if (res.data.code == 1) {
+          if (res.data.data.avatars !== "") {
+            this.avatars = res.data.data.avatars;
+          }
+        } else {
+        }
+      });
     }
+  },
+  created() {
+    this.User();
   }
 };
 </script>
@@ -57,10 +72,12 @@ export default {
 }
 .maincomponent {
   display: flex;
+  align-items: center;
 }
 .mainlogo {
   display: block;
   width: 58px;
+  height: 40px;
   margin-left: 30px;
 }
 .maintitle {
@@ -77,11 +94,12 @@ export default {
   height: 40px;
 }
 .search {
-  /* background: #ccc; */
   width: 50px;
   margin-left: 50px;
 }
 .avatar {
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   margin: 0 30px 0 50px;
 }

@@ -84,6 +84,7 @@ const routes = [{
     component: () => import("../views/VideoPlay.vue"),
     meta: {
       hideNav: true,
+      needLogin: true,
     },
   },
 ];

@@ -16,8 +16,8 @@
             @click="toDetail(item._id)"
           >
             <van-image :src="item.coverImage" />
-            <h1>{{ item.name | spliceStr(6) }}</h1>
-            <h1>{{ item.tag | spliceStr(6) }}</h1>
+            <h1>{{ item.name }}</h1>
+            <h1>{{ item.tag }}</h1>
           </van-grid-item>
         </van-grid>
       </div>
@@ -36,8 +36,8 @@
             :key="index"
           >
             <van-image :src="item.coverImage" />
-            <h1>{{ item.name | spliceStr(6) }}</h1>
-            <h1>{{ item.tag | spliceStr(6) }}</h1>
+            <h1>{{ item.name }}</h1>
+            <h1>{{ item.tag }}</h1>
           </van-grid-item>
         </van-grid>
       </div>
@@ -56,8 +56,8 @@
             @click="toDetail(item._id)"
           >
             <van-image :src="item.coverImage" />
-            <h1>{{ item.name | spliceStr(6) }}</h1>
-            <h1>{{ item.tag | spliceStr(6) }}</h1>
+            <h1>{{ item.name }}</h1>
+            <h1>{{ item.tag }}</h1>
           </van-grid-item>
         </van-grid>
       </div>
@@ -78,44 +78,39 @@ export default {
       score: 3.5,
       hotlistmovies: [],
       scorelistmovies: [],
-      guesslikemovies: [],
+      guesslikemovies: []
     };
-  },
-  filters: {
-    spliceStr(str, n) {
-      return str.length > n ? str.substr(0, n) + "..." : str;
-    },
   },
   components: {
     TopBar,
-    Banner,
+    Banner
   },
   methods: {
     getHotListData() {
-      Movies(3, 1, "views").then((res) => {
+      Movies(3, 1, "views").then(res => {
         this.hotlistmovies = res.data.list;
       });
     },
     getScoreListData() {
-      Movies(3, 1, "score").then((res) => {
+      Movies(3, 1, "score").then(res => {
         this.scorelistmovies = res.data.list;
       });
     },
     getData() {
-      Movies(30, 1, "_id").then((res) => {
+      Movies(30, 1, "_id").then(res => {
         this.guesslikemovies = res.data.list;
       });
     },
     toDetail(id) {
       this.$router.push({ name: "MovieDetail", query: { id } });
-    },
+    }
   },
   computed: {},
   created() {
     this.getHotListData();
     this.getScoreListData();
     this.getData();
-  },
+  }
 };
 </script>
 <style scoped>
@@ -134,14 +129,35 @@ export default {
   font-size: 20px;
   margin: 30px 0 10px 0;
 }
-.hotlist-bottom h1:nth-child(2) {
-  padding-top: 20px;
-  font-size: 30px;
+.van-image__img {
+  width: 217px;
+  height: 289px;
 }
-.hotlist h1:nth-child(3) {
-  font-size: 11px;
-  padding-top: 20px;
+.hotlist-bottom h1:nth-child(2),
+.scorelist-bottom h1:nth-child(2),
+.guesslike-bottom h1:nth-child(2) {
+  padding-top: 10px;
+  font-size: 30px;
+  line-height: 60px;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+.hotlist-bottom h1:nth-child(3),
+.scorelist-bottom h1:nth-child(3),
+.guesslike-bottom h1:nth-child(3) {
+  font-size: 26px;
   color: #707070;
+  line-height: 40px;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
 }
 /* 评分榜推荐 */
 .scorelist-top {
@@ -158,15 +174,6 @@ export default {
   margin: 15px 0 15px 0;
   font-size: 20px;
 }
-.scorelist-bottom h1:nth-child(2) {
-  padding-top: 20px;
-  font-size: 30px;
-}
-.scorelist h1:nth-child(3) {
-  font-size: 11px;
-  padding-top: 20px;
-  color: #707070;
-}
 /* 猜你想看 */
 .guesslike-top {
   display: flex;
@@ -181,14 +188,5 @@ export default {
 .guesslike-top h1:nth-child(2) {
   margin: 15px 0 15px 0;
   font-size: 20px;
-}
-.guesslike-bottom h1:nth-child(2) {
-  padding-top: 20px;
-  font-size: 30px;
-}
-.guesslike h1:nth-child(3) {
-  font-size: 12px;
-  padding-top: 20px;
-  color: #707070;
 }
 </style>
