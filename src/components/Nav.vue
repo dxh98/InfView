@@ -72,6 +72,25 @@ export default {
         : this.imageUrl.mediaboxspage;
     }
   },
+  watch: {
+    $route() {
+      if (this.$route.path == "/") {
+        this.isSel = 0;
+      }
+      if (this.$route.path == "/sort") {
+        this.isSel = 1;
+      }
+      if (this.$route.path == "/hotlist") {
+        this.isSel = 2;
+      }
+      if (this.$route.path == "/informations") {
+        this.isSel = 3;
+      }
+      if (this.$route.path == "/mediabox") {
+        this.isSel = 4;
+      }
+    }
+  },
   components: {},
   methods: {
     tabpage(index, name) {

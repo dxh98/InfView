@@ -106,13 +106,13 @@ export default {
   },
   methods: {
     getHotListData() {
-      const n = Math.ceil(Math.random() * 50);
+      const n = Math.ceil(Math.random() * 200);
       Movies(3, n, "views").then(res => {
         this.hotlistmovies = res.data.list;
       });
     },
     getScoreListData() {
-      const n = Math.ceil(Math.random() * 50);
+      const n = Math.ceil(Math.random() * 200);
       Movies(3, n, "score").then(res => {
         this.scorelistmovies = res.data.list;
       });
