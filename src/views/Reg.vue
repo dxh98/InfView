@@ -8,8 +8,8 @@
       <input v-model="RegForm.username" type="text" placeholder="请输入账号" />
       <input v-model="RegForm.nickName" type="text" placeholder="请输入昵称" />
       <input v-model="RegForm.password" type="password" placeholder="请输入密码" />
-      <input v-model="confirmpassword" type="password" placeholder="确认密码" />
-      <button @click="Reg">注册</button>
+      <input v-model="confirmpassword" v-on:input="onChange" type="password" placeholder="确认密码" />
+      <van-button :color="this.bgcolor" @click="Reg">注册</van-button>
 
       <a href="#" @click="tabpage">已有账号，我要登录</a>
     </div>
@@ -29,6 +29,7 @@ export default {
         avatar: "",
         nickName: ""
       },
+      bgcolor: "rgba(245, 51, 15, 0.5)",
       confirmpassword: "",
       imgSrc: require("@/assets/icons/avatars.png")
     };
@@ -42,6 +43,14 @@ export default {
       this.$router.push({
         name: "Login"
       });
+    },
+    onChange(e) {
+      const { value } = e.target;
+      if (this.confirmpassword == this.RegForm.password) {
+        this.bgcolor = "rgba(245, 51, 15)";
+      } else {
+        this.bgcolor = "rgba(245, 51, 15, 0.5)";
+      }
     },
     Reg() {
       if (this.RegForm.username == "" || this.RegForm.password == "") {

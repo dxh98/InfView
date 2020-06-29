@@ -104,7 +104,6 @@ export default {
   border-radius: 1.5rem;
   margin-top: 1.5rem;
   color: white;
-  background-color: #fab3b3;
   cursor: pointer;
   outline: none;
 }

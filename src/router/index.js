@@ -26,17 +26,11 @@ const routes = [{
     path: "/informations",
     name: "Informations",
     component: () => import("../views/Informations.vue"),
-    // meta: {
-    //   hideNav: true,
-    // },
   },
   {
     path: "/mediabox",
     name: "MediaBox",
     component: () => import("../views/MediaBox.vue"),
-    // meta: {
-    //   hideNav: true,
-    // },
   },
   {
     path: "/user",
