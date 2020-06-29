@@ -1,12 +1,14 @@
 <template>
-  <div class="sortlist">
-    <van-grid :column-num="2">
-      <van-grid-item v-for="(item, index) in Movies" :key="index" @click="toDetail(item._id)">
-        <van-image class="coverImage" :src="item.coverImage" />
-        <h1>{{ item.name }}</h1>
-        <h1>{{ item.tag }}</h1>
-      </van-grid-item>
-    </van-grid>
+  <div class="box" ref="viewbox">
+    <div class="sortlist">
+      <van-grid :column-num="2">
+        <van-grid-item v-for="(item, index) in Movies" :key="index" @click="toDetail(item._id)">
+          <van-image class="coverImage" :src="item.coverImage" />
+          <h1>{{ item.name }}</h1>
+          <h1>{{ item.tag }}</h1>
+        </van-grid-item>
+      </van-grid>
+    </div>
   </div>
 </template>
 
@@ -17,7 +19,8 @@ export default {
   props: ["catName"],
   data() {
     return {
-      Movies: []
+      Movies: [],
+      page: 1
     };
   },
   filters: {
@@ -29,7 +32,10 @@ export default {
     catName: {
       handler(newVal, oldVel) {
         if (newVal) {
-          Movies(20, 1, "_id", newVal).then(res => {
+          this.$refs.viewbox.scrollTop = 0;
+          this.page = 1;
+          Movies(20, this.page, "views", newVal).then(res => {
+            console.log(res);
             this.Movies = res.data.list;
           });
         }
@@ -38,20 +44,54 @@ export default {
     }
   },
   components: {},
+  mounted() {
+    this.box = this.$refs.viewbox;
+    this.box.addEventListener(
+      "scroll",
+      () => {
+        if (
+          this.$refs.viewbox.scrollTop + this.$refs.viewbox.clientHeight ==
+          this.$refs.viewbox.scrollHeight - this.page
+        ) {
+          Movies(20, this.page, "views", this.catName).then(res => {
+            console.log(res);
+            this.Movies = [...this.Movies, ...res.data.list];
+            this.page++;
+          });
+        }
+      },
+      true
+    );
+  },
   methods: {
     toDetail(id) {
       this.$router.push({ name: "MovieDetail", query: { id } });
     }
   },
   created() {
-    Movies(20, 1, "_id", this.catName).then(res => {
+    Movies(20, this.page, "views", this.catName).then(res => {
+      console.log(res);
       this.Movies = res.data.list;
+      this.page++;
     });
   }
 };
 </script>
 
 <style scoped>
+.box {
+  width: 100%;
+  height: 1120px;
+  overflow-y: auto;
+}
+.box::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+}
+.sortlist {
+  width: 100%;
+  height: 100%;
+}
 .coverImage {
   width: 237px;
   height: 320px;

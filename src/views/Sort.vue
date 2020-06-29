@@ -5,11 +5,7 @@
       <div class="leftnavigation">
         <div class="categorylist">
           <van-sidebar v-model="activeKey" @change="onChange">
-            <van-sidebar-item
-              v-for="item in categoryList"
-              :key="item.index"
-              :title="item"
-            />
+            <van-sidebar-item v-for="item in categoryList" :key="item.index" :title="item" />
           </van-sidebar>
         </div>
       </div>
@@ -40,21 +36,21 @@ export default {
         "动作",
         "惊悚",
         "4K",
-        "香港地区",
+        "香港地区"
       ],
       activeKey: 0,
-      catName: "动画",
+      catName: "动画"
     };
   },
   components: {
     TopBar,
-    SortList,
+    SortList
   },
   methods: {
     onChange(index) {
       this.catName = this.categoryList[index];
-    },
-  },
+    }
+  }
 };
 </script>
 <style scoped>
@@ -79,11 +75,5 @@ export default {
 }
 .rightlist {
   flex: 1;
-  height: 1120px;
-  overflow-y: auto;
-}
-.rightlist::-webkit-scrollbar {
-  width: 0px;
-  height: 0px;
 }
 </style>

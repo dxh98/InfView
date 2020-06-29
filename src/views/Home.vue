@@ -80,8 +80,7 @@ export default {
       scorelistmovies: [],
       guesslikemovies: [],
       pages: 1,
-      page: 1,
-      scroll: ""
+      page: 1
     };
   },
   components: {
@@ -144,7 +143,7 @@ export default {
   created() {
     this.getHotListData();
     this.getScoreListData();
-    this.getData(1);
+    this.getData();
   }
 };
 </script>
