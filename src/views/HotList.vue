@@ -67,6 +67,9 @@ export default {
     Movies(30, 1, "score").then(res => {
       this.ScoreMovies = res.data.list;
     });
+    if (this.$route.query.active) {
+      this.active = this.$route.query.active;
+    }
   }
 };
 </script>

@@ -1,12 +1,12 @@
 <template>
-  <div class="home">
+  <div class="home" ref="viewbox">
     <TopBar />
     <Banner />
     <!-- 热度榜推荐 -->
     <div class="hotlist">
       <div class="hotlist-top">
         <h1>热度榜推荐</h1>
-        <h1>更多 &gt;</h1>
+        <h1 @click="toHotList">更多 &gt;</h1>
       </div>
       <div class="hotlist-bottom">
         <van-grid :column-num="3" :gutter="0.5" :border="false">
@@ -26,7 +26,7 @@
     <div class="scorelist">
       <div class="scorelist-top">
         <h1>评分榜推荐</h1>
-        <h1>更多 &gt;</h1>
+        <h1 @click="toScoreList(1)">更多 &gt;</h1>
       </div>
       <div class="scorelist-bottom">
         <van-grid :column-num="3" :gutter="0.5" :border="false">
@@ -46,7 +46,7 @@
     <div class="guesslike">
       <div class="guesslike-top">
         <h1>猜你想看</h1>
-        <h1>更多 &gt;</h1>
+        <h1 @click="toSort">更多 &gt;</h1>
       </div>
       <div class="guesslike-bottom">
         <van-grid :column-num="3" :gutter="0.5" :border="false">
@@ -78,38 +78,73 @@ export default {
       score: 3.5,
       hotlistmovies: [],
       scorelistmovies: [],
-      guesslikemovies: []
+      guesslikemovies: [],
+      pages: 1,
+      page: 1,
+      scroll: ""
     };
   },
   components: {
     TopBar,
     Banner
   },
+  mounted() {
+    this.box = this.$refs.viewbox;
+    this.box.addEventListener(
+      "scroll",
+      () => {
+        if (
+          this.$refs.viewbox.scrollTop + this.$refs.viewbox.clientHeight ==
+          this.$refs.viewbox.scrollHeight
+        ) {
+          Movies(30, this.page, "_id").then(res => {
+            this.guesslikemovies = [...this.guesslikemovies, ...res.data.list];
+            this.page++;
+          });
+        }
+      },
+      true
+    );
+  },
   methods: {
     getHotListData() {
-      Movies(3, 1, "views").then(res => {
+      const n = Math.ceil(Math.random() * 50);
+      Movies(3, n, "views").then(res => {
         this.hotlistmovies = res.data.list;
       });
     },
     getScoreListData() {
-      Movies(3, 1, "score").then(res => {
+      const n = Math.ceil(Math.random() * 50);
+      Movies(3, n, "score").then(res => {
         this.scorelistmovies = res.data.list;
       });
     },
     getData() {
-      Movies(30, 1, "_id").then(res => {
+      Movies(30, this.page, "_id").then(res => {
         this.guesslikemovies = res.data.list;
+        this.pages = res.data.pages;
+        this.page++;
       });
     },
     toDetail(id) {
       this.$router.push({ name: "MovieDetail", query: { id } });
+    },
+    toHotList() {
+      this.$router.push({ name: "HotList" });
+    },
+    toScoreList(index) {
+      this.$router.push({ name: "HotList", query: { active: index } });
+    },
+    toSort() {
+      this.$router.push({ name: "Sort" });
     }
   },
+
   computed: {},
   created() {
     this.getHotListData();
     this.getScoreListData();
-    this.getData();
+    this.getData(1);
   }
 };
 </script>

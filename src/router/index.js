@@ -104,7 +104,6 @@ router.beforeEach((to, from, next) => {
           name: "Login",
         });
       }
-
     }
   } else {
     next();
