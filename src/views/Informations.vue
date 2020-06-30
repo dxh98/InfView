@@ -2,14 +2,19 @@
   <div class="informations">
     <TopBar />
 
-    <div class="singlemessage" v-for="item in movies" @click="toDetail(item._id)" :key="item.index">
+    <div
+      class="singlemessage"
+      v-for="(item,index) in movies"
+      @click="toDetail(item._id)"
+      :key="index"
+    >
       <img :src="item.coverImage" alt />
       <h1>
         <h1>
           <span>推荐电影：&nbsp;</span>
           <span>{{item.name | spliceStr}}</span>
         </h1>
-        <span v-for="item in item.category" :key="item.index">{{item}}&nbsp;/&nbsp;</span>
+        <span v-for="(item,index) in item.category" :key="index">{{item}}&nbsp;/&nbsp;</span>
         <span>{{item.views}}次观看</span>
         <h1>简介：{{item.tag}}</h1>
       </h1>
@@ -28,7 +33,8 @@ export default {
     return {
       totalcount: 0,
       randomindex: [],
-      movies: []
+      movies: [],
+      searchResult: []
     };
   },
   filters: {
@@ -42,7 +48,7 @@ export default {
   methods: {
     getIndex() {
       for (let i = 0; i < 10; i++) {
-        const str = Math.ceil(Math.random() * 500);
+        const str = Math.ceil(Math.random() * 150);
         for (let j = 0; j < this.randomindex.length; j++) {
           if (this.randomindex[j] == str) {
             this.randomindex.splice(j, 1);
@@ -57,11 +63,12 @@ export default {
     }
   },
   async mounted() {
-    await Movies(500, 1, "score").then(res => {
-      for (let i = 0; i < this.randomindex.length; i++) {
-        this.movies.push(res.data.list[this.randomindex[i]]);
-      }
+    await Movies(150, 1, "score").then(res => {
+      this.searchResult = [...this.searchResult, ...res.data.list];
     });
+    for (let i = 0; i < this.randomindex.length; i++) {
+      this.movies.push(this.searchResult[this.randomindex[i]]);
+    }
   },
   created() {
     this.getIndex();

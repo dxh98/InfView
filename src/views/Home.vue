@@ -118,7 +118,8 @@ export default {
       });
     },
     getData() {
-      Movies(30, this.page, "_id").then(res => {
+      const num = Math.ceil(Math.random() * 50);
+      Movies(30, num, "_id").then(res => {
         this.guesslikemovies = res.data.list;
         this.pages = res.data.pages;
         this.page++;

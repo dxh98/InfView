@@ -35,17 +35,14 @@ export default {
       this.$router.go(-1);
     },
     onChange() {
-      console.log(this.value);
       if (this.value == "") {
         this.styleObj.display = "none";
       } else {
         this.styleObj.display = "block";
       }
-      console.log(this.styleObj.display);
       this.searchResult = [];
       MoviesSearch(10, 1, "score", this.value).then(res => {
         this.searchResult = res.data.list;
-        console.log(this.searchResult);
       });
     },
     toDetail(id) {

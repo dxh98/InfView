@@ -94,9 +94,10 @@ router.beforeEach((to, from, next) => {
       next();
     } else {
       if (confirm("您还未登录，是否前往登录？")) {
-        next({
-          name: "Login",
-        });
+        router.push('login')
+        // next({
+        //   path: "/Login",
+        // });
       }
     }
   } else {
