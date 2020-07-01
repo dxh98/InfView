@@ -5,8 +5,8 @@
         <van-image
           @click="onClickLeft"
           class="gobackicon"
-          width="25"
-          height="25"
+          width="22"
+          height="22"
           :src="gobackicon"
         />
       </template>

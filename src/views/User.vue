@@ -47,13 +47,9 @@
       </van-overlay>
     </div>
     <a href="#">管理您的&nbsp;InfView&nbsp;账号</a>
-    <div class="actionbar">
+    <div @click="goFavList" class="actionbar">
       <img src="@/assets/icons/fav.png" alt />
       <h1>您的收藏</h1>
-    </div>
-    <div class="actionbar">
-      <img src="@/assets/icons/workinghome.png" alt />
-      <h1>InfView工作室</h1>
     </div>
     <div class="actionbar">
       <img src="@/assets/icons/viewstime.png" alt />
@@ -63,7 +59,7 @@
       <img src="@/assets/icons/data.png" alt />
       <h1>您在InView的数据</h1>
     </div>
-    <div class="actionbar">
+    <div @click="show = true" class="actionbar">
       <img src="@/assets/icons/switch.png" alt />
       <h1>切换账号</h1>
     </div>
@@ -80,9 +76,9 @@
         <img src="@/assets/icons/site.png" alt />
         <h1>设置</h1>
       </div>
-      <div class="actionbar">
-        <img src="@/assets/icons/help.png" alt />
-        <h1>帮助和反馈</h1>
+      <div @click="logout" class="actionbar">
+        <img src="@/assets/icons/logout.png" alt />
+        <h1>退出登录</h1>
       </div>
     </div>
   </div>
@@ -104,11 +100,19 @@ export default {
     onClickLeft() {
       this.$router.go(-1);
     },
+    goFavList() {
+      this.$router.push({ name: "FavList" });
+    },
     logout() {
-      if (confirm("确认注销账户吗？")) {
-        delToken();
-        this.$router.push({ name: "Home" });
-      }
+      this.$dialog
+        .confirm({
+          message: "确认注销账户吗？"
+        })
+        .then(() => {
+          delToken();
+          this.$router.push({ name: "Home" });
+        })
+        .catch(() => {});
     }
   },
   mounted() {
@@ -130,14 +134,16 @@ export default {
 }
 #reset /deep/ .van-ellipsis {
   font-weight: bolder;
-  font-size: 40px;
+  font-size: 36px;
   margin-left: 190px;
 }
 .userinfoshow {
   display: flex;
+  align-items: flex-start;
 }
 .userinfoshow > img {
   width: 80px;
+  height: 80px;
   border-radius: 50%;
   margin: 40px 40px 30px 60px;
 }

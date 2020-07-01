@@ -49,7 +49,10 @@ export default {
     },
     Login() {
       if (this.LoginForm.username == "" || this.LoginForm.password == "") {
-        alert("账号密码不能为空");
+        this.$toast.fail({
+          message: "账号密码不能为空",
+          icon: "warning"
+        });
       } else {
         post("/api/v1/auth/login", {
           userName: this.LoginForm.username,
@@ -57,14 +60,20 @@ export default {
         }).then(res => {
           if (res.data.code == 1) {
             setToken(res.data.token);
-            alert("登陆成功");
+            this.$toast.success({
+              message: "登录成功",
+              icon: "checked"
+            });
             this.$router
               .push({
                 name: "Home"
               })
               .catch(() => {});
           } else {
-            alert(res.data.message);
+            this.$toast.fail({
+              message: res.data.msg,
+              icon: "warning"
+            });
           }
         });
       }

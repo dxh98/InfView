@@ -30,7 +30,7 @@
       </div>
       <div class="action">
         <van-button hairline icon="play-circle-o" color="#841703" @click="toPlay">立即播放</van-button>
-        <van-button hairline icon="like-o" color="#841703">立即收藏</van-button>
+        <van-button @click="favmovie" hairline :icon="this.icons" color="#841703">{{this.favtext}}</van-button>
       </div>
     </div>
 
@@ -42,16 +42,22 @@
 
 <script type="text/ecmascript-6">
 import { getOneMovie } from "../service/Movies";
-import { isLogined } from "../utils/auth";
+import { put, get } from "@/utils/request.js";
+import { isLogined, getToken } from "@/utils/auth";
 export default {
   name: "MovieDetail",
   data() {
     return {
+      icons: "like-o",
+      favtext: "立即收藏",
+      isfaved: false,
       moviedata: "",
       bgcolor: "",
       value: 0,
       score: 0,
-      scorenumber: 0
+      scorenumber: 0,
+      favList: [],
+      spliceIndex: ""
     };
   },
   components: {},
@@ -62,24 +68,66 @@ export default {
     toPlay() {
       this.$router.push({
         name: "VideoPlay",
-        query: { url: this.moviedata.playUrl, name: this.moviedata.name }
+        query: {
+          url: this.moviedata.playUrl,
+          name: this.moviedata.name,
+          id: this.moviedata._id
+        }
       });
     },
-    getbgcolor() {
-      let R = Math.ceil(Math.random() * 80);
-      let G = Math.ceil(Math.random() * 80);
-      let B = Math.ceil(Math.random() * 80);
-      let A = 0.9;
-      this.bgcolor = "rgb(" + R + "," + G + "," + B + "," + A + ")";
-      this.styleObj = "background:" + this.bgcolor;
+    async favmovie() {
+      // 首先判断是否已经收藏
+      if (!this.isfaved) {
+        const favindex = { id: this.moviedata._id };
+        this.favList.unshift(favindex);
+        put("/api/v1/userinfo/update_info", {
+          favList: this.favList
+        }).then(res => {
+          if ((res.code = 1)) {
+            this.icons = "like";
+            this.favtext = "已经收藏";
+            this.isfaved = true;
+            this.$toast({
+              message: "收藏成功",
+              icon: "checked"
+            });
+          }
+        });
+      } else {
+        this.favList.splice(this.spliceIndex, 1);
+        put("/api/v1/userinfo/update_info", {
+          favList: this.favList
+        }).then(res => {
+          this.icons = "like-o";
+          this.favtext = "立即收藏";
+          this.isfaved = false;
+          this.$toast({
+            message: "取消收藏",
+            icon: "warning"
+          });
+        });
+      }
     }
   },
-  created() {
-    getOneMovie(this.$route.query.id).then(res => {
+  async created() {
+    await getOneMovie(this.$route.query.id).then(res => {
       this.moviedata = res.data.data;
       this.value = res.data.data.score / 2;
       this.score = res.data.data.score.toFixed(1);
       this.scorenumber = Math.ceil((res.data.data.views / 3) * 2);
+    });
+    get("/api/v1/userinfo").then(res => {
+      this.favList = res.data.data.favList;
+      for (let i = 0; i < res.data.data.favList.length; i++) {
+        const id = res.data.data.favList[i].id;
+        if (id.indexOf(this.moviedata._id) == -1) {
+        } else {
+          this.spliceIndex = i;
+          this.isfaved = true;
+          this.icons = "like";
+          this.favtext = "已经收藏";
+        }
+      }
     });
   }
 };

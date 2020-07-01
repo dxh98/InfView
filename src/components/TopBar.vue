@@ -7,7 +7,7 @@
           <span class="maintitle">InfView</span>
         </div>
         <div class="actions">
-          <img class="upload" src="@/assets/icons/upload.png" alt />
+          <img @click="goParsing" class="upload" src="@/assets/icons/upload.png" alt />
           <img @click="goSearch" class="search" src="@/assets/icons/search.png" alt />
           <img @click="goUser" class="avatar" :src="this.avatars" alt />
         </div>
@@ -37,6 +37,9 @@ export default {
     },
     goUser() {
       this.$router.push({ name: "User" });
+    },
+    goParsing() {
+      this.$router.push({ name: "ParsingUrl" });
     },
     User() {
       get("/api/v1/userinfo", {

@@ -100,8 +100,8 @@ export default {
 }
 .singlemessage img:nth-child(1) {
   width: 50px;
-  height: 66.66px;
-  border-radius: 100% 100% 100% 100%;
+  height: 50px;
+  border-radius: 50%;
 }
 .singlemessage > h1 > h1:nth-child(1) > span:nth-child(1) {
   font-size: 30px;

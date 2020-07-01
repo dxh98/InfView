@@ -10,11 +10,11 @@ import Nav from "./components/Nav";
 export default {
   data() {
     return {
-      hideNav: false, //默认是显示的
+      hideNav: false //默认是显示的
     };
   },
   components: {
-    Nav,
+    Nav
   },
   watch: {
     $route() {
@@ -23,8 +23,8 @@ export default {
       } else {
         this.hideNav = false;
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

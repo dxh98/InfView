@@ -17,12 +17,17 @@
 </template>
 
 <script type="text/ecmascript-6">
+import { put, get } from "@/utils/request.js";
+
 export default {
   name: "VideoPlay",
   data() {
     return {
       name: "",
-      playUrl: ""
+      playUrl: "",
+      historyList: [],
+      isplayed: false,
+      isplayedindex: ""
     };
   },
   components: {},
@@ -34,6 +39,49 @@ export default {
   created() {
     this.name = this.$route.query.name;
     this.playUrl = this.$route.query.url;
+    this.id = this.$route.query.id;
+    // 首先判断这个电影id是不是已经在观看历史列表里了
+    get("/api/v1/userinfo").then(res => {
+      console.log(res.data.data.history.length);
+      if (res.data.data.history.length == 0) {
+        // 还没有观看历史
+        console.log("还没有观看历史");
+        const historyindex = { id: this.$route.query.id };
+        this.historyList.unshift(historyindex);
+        // 加入记录
+        put("/api/v1/userinfo/update_info", {
+          history: this.historyList
+        });
+      } else {
+        // 有观看历史记录
+        this.historyList = res.data.data.history;
+        for (let i = 0; i < res.data.data.history.length; i++) {
+          const id = res.data.data.history[i].id;
+          // 判断电影是否已经存在于记录中
+          if (id.indexOf(this.$route.query.id) == -1) {
+            // 该电影不存在于播放记录里，加入进去
+          } else {
+            // 该电影存在于播放记录里
+            this.isplayed = true;
+            this.isplayedindex = i;
+          }
+        }
+        if (this.isplayed == false) {
+          const historyindex = { id: this.$route.query.id };
+          this.historyList.unshift(historyindex);
+          put("/api/v1/userinfo/update_info", {
+            history: this.historyList
+          });
+        } else {
+          const historyindex = { id: this.$route.query.id };
+          this.historyList.splice(this.isplayedindex, 1);
+          this.historyList.unshift(historyindex);
+          put("/api/v1/userinfo/update_info", {
+            history: this.historyList
+          });
+        }
+      }
+    });
   }
 };
 </script>

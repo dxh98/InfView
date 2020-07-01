@@ -6,8 +6,8 @@ import {
 
 const instance = axios.create({
   timeout: 5000, //网络请求超时时间
-  // baseURL: "http://106.14.70.106:8800",
-  baseURL: "http://localhost:8800",
+  baseURL: "http://106.14.70.106:8800",
+  // baseURL: "http://localhost:8800",
 });
 
 // // Add a request interceptor

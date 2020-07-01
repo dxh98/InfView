@@ -4,6 +4,9 @@ import Home from "../views/Home.vue";
 import {
   isLogined
 } from "../utils/auth"
+import {
+  Dialog
+} from "vant";
 
 Vue.use(VueRouter);
 
@@ -41,6 +44,22 @@ const routes = [{
     },
   },
   {
+    path: "/history",
+    name: "History",
+    component: () => import("../views/History.vue"),
+    meta: {
+      needLogin: true,
+    },
+  },
+  {
+    path: "/favlist",
+    name: "FavList",
+    component: () => import("../views/FavList.vue"),
+    meta: {
+      needLogin: true,
+    },
+  },
+  {
     path: "/login",
     name: "Login",
     component: () => import("../views/Login.vue"),
@@ -52,6 +71,22 @@ const routes = [{
     path: "/reg",
     name: "Reg",
     component: () => import("../views/Reg.vue"),
+    meta: {
+      hideNav: true,
+    },
+  },
+  {
+    path: "/parsingurl",
+    name: "ParsingUrl",
+    component: () => import("../views/ParsingUrl.vue"),
+    meta: {
+      hideNav: true,
+    },
+  },
+  {
+    path: "/parsingplay",
+    name: "ParsingPlay",
+    component: () => import("../views/ParsingPlay.vue"),
     meta: {
       hideNav: true,
     },
@@ -93,12 +128,13 @@ router.beforeEach((to, from, next) => {
     if (isLogined()) {
       next();
     } else {
-      if (confirm("您还未登录，是否前往登录？")) {
-        router.push('login')
-        // next({
-        //   path: "/Login",
-        // });
-      }
+      Dialog.confirm({
+          message: "您还未登录，是否前往登录？"
+        })
+        .then(() => {
+          router.push('login')
+        })
+        .catch(() => {})
     }
   } else {
     next();

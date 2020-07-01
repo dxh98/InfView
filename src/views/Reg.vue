@@ -54,7 +54,10 @@ export default {
     },
     Reg() {
       if (this.RegForm.username == "" || this.RegForm.password == "") {
-        alert("账号密码不能为空");
+        this.$toast.fail({
+          message: "账号密码不能为空",
+          icon: "warning"
+        });
       } else {
         if (this.RegForm.password == this.confirmpassword) {
           post("/api/v1/auth/reg", {
@@ -64,14 +67,23 @@ export default {
             nickName: this.RegForm.nickName
           }).then(res => {
             if (res.data.code == 1) {
-              alert("用户注册成功");
+              this.$toast.success({
+                message: "用户注册成功",
+                icon: "checked"
+              });
               this.$router.push({
                 name: "Login"
               });
             }
+            if (res.data.code == "error") {
+              this.$toast.fail(res.data.message);
+            }
           });
         } else {
-          alert("密码不一致");
+          this.$toast.fail({
+            message: "密码不一致",
+            icon: "warning"
+          });
         }
       }
     },
@@ -86,10 +98,10 @@ export default {
           "Content-Type": "multipart/form-data"
         }
       }).then(res => {
-        // this.imgSrc = `http://106.14.70.106:8800` + res.data.info;
-        // this.RegForm.avatar = `http://106.14.70.106:8800` + res.data.info;
-        this.imgSrc = `http://localhost:8800` + res.data.info;
-        this.RegForm.avatar = `http://localhost:8800` + res.data.info;
+        this.imgSrc = `http://106.14.70.106:8800` + res.data.info;
+        this.RegForm.avatar = `http://106.14.70.106:8800` + res.data.info;
+        // this.imgSrc = `http://localhost:8800` + res.data.info;
+        // this.RegForm.avatar = `http://localhost:8800` + res.data.info;
       });
     }
   }
