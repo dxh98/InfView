@@ -6,7 +6,7 @@
       <img @click="selImgHandle" :src="imgSrc" class="avatars" alt />
       <p class="point">请选择头像</p>
       <input v-model="RegForm.username" type="email" placeholder="请输入账号（邮箱）" />
-      <input v-model="RegForm.nickName" type="text" placeholder="请输入昵称" />
+      <input v-model="RegForm.nickName" type="text" placeholder="请输入昵称（4-12位汉字和字母组成）" />
       <input v-model="RegForm.password" type="password" placeholder="请输入密码（8-16位字母和数字组成）" />
       <input v-model="confirmpassword" v-on:input="onChange" type="password" placeholder="确认密码" />
       <van-button :color="this.bgcolor" @click="Reg">注册</van-button>
@@ -54,47 +54,60 @@ export default {
       }
     },
     Reg() {
-      if (this.RegForm.username == "" || this.RegForm.password == "") {
+      if (
+        this.RegForm.username == "" ||
+        this.RegForm.password == "" ||
+        this.RegForm.nickName == ""
+      ) {
         this.$toast.fail({
-          message: "账号或密码不能为空",
+          message: "账号、昵称和密码不能为空",
           icon: "warning"
         });
       } else {
-        var userNamereg = /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/; // 邮箱格式验证
+        var userNamereg = /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/;
+        // 正则验证账号(邮箱格式)
         if (userNamereg.test(this.RegForm.username)) {
-          // 正则验证账号
-          var passwordreg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,16}$/;
-          if (passwordreg.test(this.RegForm.password)) {
+          var nickNamereg = /^[\u4e00-\u9fa5a-zA-Z-z]{4,12}$/;
+          // 正则验证用户昵称
+          if (nickNamereg.test(this.RegForm.nickName)) {
+            var passwordreg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,16}$/;
             // 正则验证密码
-            if (this.RegForm.password == this.confirmpassword) {
-              post("/api/v1/auth/reg", {
-                userName: this.RegForm.username,
-                passWord: this.RegForm.password,
-                avatars: this.RegForm.avatar,
-                nickName: this.RegForm.nickName
-              }).then(res => {
-                if (res.data.code == 1) {
-                  this.$toast.success({
-                    message: "用户注册成功",
-                    icon: "checked"
-                  });
-                  this.$router.push({
-                    name: "Login"
-                  });
-                }
-                if (res.data.code == "error") {
-                  this.$toast.fail(res.data.message);
-                }
-              });
+            if (passwordreg.test(this.RegForm.password)) {
+              if (this.RegForm.password == this.confirmpassword) {
+                post("/api/v1/auth/reg", {
+                  userName: this.RegForm.username,
+                  passWord: this.RegForm.password,
+                  avatars: this.RegForm.avatar,
+                  nickName: this.RegForm.nickName
+                }).then(res => {
+                  if (res.data.code == 1) {
+                    this.$toast.success({
+                      message: "用户注册成功",
+                      icon: "checked"
+                    });
+                    this.$router.push({
+                      name: "Login"
+                    });
+                  }
+                  if (res.data.code == "error") {
+                    this.$toast.fail(res.data.message);
+                  }
+                });
+              } else {
+                this.$toast.fail({
+                  message: "密码不一致",
+                  icon: "warning"
+                });
+              }
             } else {
               this.$toast.fail({
-                message: "密码不一致",
+                message: "密码格式不正确！8-16位数字和字母组成",
                 icon: "warning"
               });
             }
           } else {
             this.$toast.fail({
-              message: "密码格式不正确",
+              message: "昵称的格式不正确！4-12位汉字和字母组成",
               icon: "warning"
             });
           }
