@@ -15,7 +15,7 @@
         <input v-model="passWord" type="password" placeholder="请输入新密码" />
       </li>
     </ul>
-    <van-button @click="updatePassWord" class="updatebtn" :color="this.bgcolor">确认修改</van-button>
+    <van-button @click="updatePassWord" class="updatebtn" color="#f93711">确认修改</van-button>
   </div>
 </template>
 
@@ -27,8 +27,7 @@ export default {
   data() {
     return {
       oldpwd: "",
-      passWord: "",
-      bgcolor: "rgba(245, 51, 15)"
+      passWord: ""
     };
   },
   components: {},

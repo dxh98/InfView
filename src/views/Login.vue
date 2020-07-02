@@ -4,14 +4,8 @@
     <div class="login">
       <img class="logo" src="@/assets/images/Logo.png" alt />
       <input v-model="LoginForm.username" type="text" class="username" placeholder="请输入账号" />
-      <input
-        v-on:input="onChange"
-        v-model="LoginForm.password"
-        type="password"
-        class="password"
-        placeholder="请输入密码"
-      />
-      <van-button :color="this.bgcolor" @click="Login">登录</van-button>
+      <input v-model="LoginForm.password" type="password" class="password" placeholder="请输入密码" />
+      <van-button color="#f93711" @click="Login">登录</van-button>
       <a href="#" @click="tabpage">没有账号，我要注册</a>
     </div>
   </div>
@@ -27,8 +21,7 @@ export default {
       LoginForm: {
         username: "",
         password: ""
-      },
-      bgcolor: "rgba(245, 51, 15, 0.5)"
+      }
     };
   },
   components: {},
@@ -40,12 +33,6 @@ export default {
       this.$router.push({
         name: "Reg"
       });
-    },
-    onChange(e) {
-      const { value } = e.target;
-      if (value !== "") {
-        this.bgcolor = "rgba(245, 51, 15)";
-      } else this.bgcolor = "rgba(245, 51, 15, 0.5)";
     },
     Login() {
       if (this.LoginForm.username == "" || this.LoginForm.password == "") {

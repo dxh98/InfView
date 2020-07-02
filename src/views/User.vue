@@ -153,6 +153,7 @@ export default {
   width: 80px;
   height: 80px;
   border-radius: 50%;
+  overflow: hidden;
   margin: 40px 40px 30px 60px;
   background: #ccc;
 }
@@ -232,7 +233,9 @@ export default {
 .userinfodetail > img {
   width: 80px;
   height: 80px;
+  display: block;
   border-radius: 50%;
+  overflow: hidden;
   margin-right: 50px;
   background: #ccc;
 }

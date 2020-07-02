@@ -23,7 +23,7 @@
         <input v-model="UserInfoForm.age" type="number" placeholder="请输入年龄" />
       </li>
     </ul>
-    <van-button @click="updateInfo" class="updatebtn" :color="this.bgcolor">修改</van-button>
+    <van-button @click="updateInfo" class="updatebtn" color="#f93711">修改</van-button>
   </div>
 </template>
 
@@ -40,7 +40,6 @@ export default {
         nickName: "",
         age: 0
       },
-      bgcolor: "rgba(245, 51, 15)",
       confirmpassword: "",
       imgSrc: require("@/assets/icons/avatars.png")
     };
@@ -145,6 +144,7 @@ export default {
 }
 .updatebtn {
   width: 300px;
+  height: 80px;
   border-radius: 44px;
   margin: 60px 0 0 180px;
 }
