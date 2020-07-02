@@ -42,10 +42,8 @@ export default {
     this.id = this.$route.query.id;
     // 首先判断这个电影id是不是已经在观看历史列表里了
     get("/api/v1/userinfo").then(res => {
-      console.log(res.data.data.history.length);
       if (res.data.data.history.length == 0) {
         // 还没有观看历史
-        console.log("还没有观看历史");
         const historyindex = { id: this.$route.query.id };
         this.historyList.unshift(historyindex);
         // 加入记录

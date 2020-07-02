@@ -5,9 +5,9 @@
       <input @change="fileSelected" type="file" ref="file" style="display:none" />
       <img @click="selImgHandle" :src="imgSrc" class="avatars" alt />
       <p class="point">请选择头像</p>
-      <input v-model="RegForm.username" type="text" placeholder="请输入账号" />
+      <input v-model="RegForm.username" type="email" placeholder="请输入账号（邮箱）" />
       <input v-model="RegForm.nickName" type="text" placeholder="请输入昵称" />
-      <input v-model="RegForm.password" type="password" placeholder="请输入密码" />
+      <input v-model="RegForm.password" type="password" placeholder="请输入密码（8-16位字母和数字组成）" />
       <input v-model="confirmpassword" v-on:input="onChange" type="password" placeholder="确认密码" />
       <van-button :color="this.bgcolor" @click="Reg">注册</van-button>
 
@@ -18,6 +18,7 @@
 
 <script type="text/ecmascript-6">
 import { post } from "@/utils/request.js";
+import BaseUrl from "@/config/base.js";
 
 export default {
   name: "Reg",
@@ -55,33 +56,51 @@ export default {
     Reg() {
       if (this.RegForm.username == "" || this.RegForm.password == "") {
         this.$toast.fail({
-          message: "账号密码不能为空",
+          message: "账号或密码不能为空",
           icon: "warning"
         });
       } else {
-        if (this.RegForm.password == this.confirmpassword) {
-          post("/api/v1/auth/reg", {
-            userName: this.RegForm.username,
-            passWord: this.RegForm.password,
-            avatars: this.RegForm.avatar,
-            nickName: this.RegForm.nickName
-          }).then(res => {
-            if (res.data.code == 1) {
-              this.$toast.success({
-                message: "用户注册成功",
-                icon: "checked"
+        var userNamereg = /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/; // 邮箱格式验证
+        if (userNamereg.test(this.RegForm.username)) {
+          // 正则验证账号
+          var passwordreg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,16}$/;
+          if (passwordreg.test(this.RegForm.password)) {
+            // 正则验证密码
+            if (this.RegForm.password == this.confirmpassword) {
+              post("/api/v1/auth/reg", {
+                userName: this.RegForm.username,
+                passWord: this.RegForm.password,
+                avatars: this.RegForm.avatar,
+                nickName: this.RegForm.nickName
+              }).then(res => {
+                if (res.data.code == 1) {
+                  this.$toast.success({
+                    message: "用户注册成功",
+                    icon: "checked"
+                  });
+                  this.$router.push({
+                    name: "Login"
+                  });
+                }
+                if (res.data.code == "error") {
+                  this.$toast.fail(res.data.message);
+                }
               });
-              this.$router.push({
-                name: "Login"
+            } else {
+              this.$toast.fail({
+                message: "密码不一致",
+                icon: "warning"
               });
             }
-            if (res.data.code == "error") {
-              this.$toast.fail(res.data.message);
-            }
-          });
+          } else {
+            this.$toast.fail({
+              message: "密码格式不正确",
+              icon: "warning"
+            });
+          }
         } else {
           this.$toast.fail({
-            message: "密码不一致",
+            message: "账号（邮箱）的格式不正确",
             icon: "warning"
           });
         }
@@ -98,10 +117,8 @@ export default {
           "Content-Type": "multipart/form-data"
         }
       }).then(res => {
-        this.imgSrc = `http://106.14.70.106:8800` + res.data.info;
-        this.RegForm.avatar = `http://106.14.70.106:8800` + res.data.info;
-        // this.imgSrc = `http://localhost:8800` + res.data.info;
-        // this.RegForm.avatar = `http://localhost:8800` + res.data.info;
+        this.imgSrc = BaseUrl + res.data.info;
+        this.RegForm.avatar = BaseUrl + res.data.info;
       });
     }
   }
@@ -122,6 +139,9 @@ export default {
   color: #ccc;
   font-size: 10px;
   margin-top: 0.5rem;
+}
+.van-cell-group {
+  width: 80%;
 }
 .reg input::-webkit-input-placeholder {
   color: #ccc;

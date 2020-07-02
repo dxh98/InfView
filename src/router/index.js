@@ -44,6 +44,24 @@ const routes = [{
     },
   },
   {
+    path: "/userinfoupdate",
+    name: "UserInfoUpdate",
+    component: () => import("../views/UserInfoUpdate.vue"),
+    meta: {
+      needLogin: true,
+      hideNav: true,
+    },
+  },
+  {
+    path: "/passwordupdate",
+    name: "PasswordUpdate",
+    component: () => import("../views/PasswordUpdate.vue"),
+    meta: {
+      needLogin: true,
+      hideNav: true,
+    },
+  },
+  {
     path: "/history",
     name: "History",
     component: () => import("../views/History.vue"),

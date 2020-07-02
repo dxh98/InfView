@@ -8,7 +8,7 @@
     <div class="userinfoshow">
       <img :src="this.userinfo.avatars" alt />
       <div class="userinfo" @click="show = true">
-        <span class="nickName">{{this.userinfo.nickName}}</span>
+        <span class="nickName">{{this.userinfo.nickName==""?this.text:this.userinfo.nickName}}</span>
         <span>
           <van-icon class="icons" name="arrow-down" />
         </span>
@@ -21,21 +21,21 @@
               <h1>账号</h1>
               <div class="userinfodetail">
                 <img :src="this.userinfo.avatars" alt />
-                <div class>
-                  <span class>{{this.userinfo.nickName}}</span>
+                <div>
+                  <span class>{{this.userinfo.nickName==""?this.text:this.userinfo.nickName}}</span>
 
                   <h1 class>{{this.userinfo.userName}}</h1>
                 </div>
               </div>
             </div>
             <div class="userinfo-bottom">
-              <div class="actionbar">
-                <img src="@/assets/icons/yours.png" alt />
-                <h1>您的频道</h1>
-              </div>
-              <div class="actionbar">
+              <div @click="goUpdateUserInfo" class="actionbar">
                 <img src="@/assets/icons/manageuser.png" alt />
-                <h1>管理账号</h1>
+                <h1>个人信息</h1>
+              </div>
+              <div @click="goUpdatePassword" class="actionbar">
+                <img src="@/assets/icons/yours.png" alt />
+                <h1>修改密码</h1>
               </div>
               <div @click="logout" class="actionbar">
                 <img src="@/assets/icons/logout.png" alt />
@@ -46,7 +46,7 @@
         </div>
       </van-overlay>
     </div>
-    <a href="#">管理您的&nbsp;InfView&nbsp;账号</a>
+    <a href="#" @click="goUpdateUserInfo">管理您的&nbsp;InfView&nbsp;个人信息</a>
     <div @click="goFavList" class="actionbar">
       <img src="@/assets/icons/fav.png" alt />
       <h1>您的收藏</h1>
@@ -92,7 +92,8 @@ export default {
   data() {
     return {
       userinfo: "",
-      show: false
+      show: false,
+      text: "您还未设置昵称"
     };
   },
   components: {},
@@ -103,9 +104,16 @@ export default {
     goFavList() {
       this.$router.push({ name: "FavList" });
     },
+    goUpdateUserInfo() {
+      this.$router.push({ name: "UserInfoUpdate" });
+    },
+    goUpdatePassword() {
+      this.$router.push({ name: "PasswordUpdate" });
+    },
     logout() {
       this.$dialog
         .confirm({
+          title: "登出",
           message: "确认注销账户吗？"
         })
         .then(() => {
@@ -146,6 +154,7 @@ export default {
   height: 80px;
   border-radius: 50%;
   margin: 40px 40px 30px 60px;
+  background: #ccc;
 }
 .userinfo {
   margin-top: 40px;
@@ -154,6 +163,7 @@ export default {
 .userinfo > span:nth-child(1) {
   font-weight: bolder;
   font-size: 30px;
+  height: 34px;
 }
 .userinfo > span:nth-child(2) {
   display: inline-block;
@@ -161,6 +171,8 @@ export default {
 }
 .userName {
   margin-top: 10px;
+  font-size: 30px;
+  height: 30px;
 }
 .user > a {
   display: block;
@@ -219,14 +231,19 @@ export default {
 }
 .userinfodetail > img {
   width: 80px;
+  height: 80px;
   border-radius: 50%;
   margin-right: 50px;
+  background: #ccc;
 }
 .userinfodetail > div:nth-child(2) > span {
   font-size: 30px;
   font-weight: bolder;
+  height: 34px;
 }
 .userinfodetail > div:nth-child(2) > h1 {
   margin-top: 10px;
+  height: 30px;
+  font-size: 30px;
 }
 </style>
