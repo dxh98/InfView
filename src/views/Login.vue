@@ -93,12 +93,12 @@ export default {
   width: 30%;
 }
 .login input {
-  margin-top: 60px;
-  padding: 0.5rem 0;
+  margin-top: 50px;
+  padding: 16px 0;
   width: 90%;
-  height: 2rem;
+  height: 64px;
   outline: none;
-  border-bottom: 0.01rem solid #ccc;
+  border-bottom: 1px solid #ccc;
 }
 .login input::-webkit-input-placeholder {
   color: #ccc;
@@ -110,8 +110,8 @@ export default {
   height: 100px;
   font-size: 32px;
   border: 0;
-  border-radius: 1.5rem;
-  margin-top: 1.5rem;
+  border-radius: 50px;
+  margin-top: 48px;
   color: white;
   cursor: pointer;
   outline: none;

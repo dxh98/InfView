@@ -150,8 +150,8 @@ export default {
 }
 .reg .point {
   color: #ccc;
-  font-size: 10px;
-  margin-top: 0.5rem;
+  font-size: 24px;
+  margin-top: 20px;
 }
 .van-cell-group {
   width: 80%;
@@ -162,20 +162,20 @@ export default {
   line-height: 50px;
 }
 .reg input {
-  margin-top: 1.3rem;
-  padding: 0.5rem 0;
+  margin-top: 30px;
+  padding: 16px 0;
   width: 90%;
-  height: 2rem;
+  height: 70px;
   outline: none;
-  border-bottom: 0.01rem solid #ccc;
+  border-bottom: 1px solid #ccc;
 }
 .reg button {
   width: 80%;
   height: 100px;
   font-size: 32px;
   border: 0;
-  border-radius: 1.5rem;
-  margin-top: 1.5rem;
+  border-radius: 50px;
+  margin-top: 48px;
   color: white;
   background-color: #fab3b3;
 }
