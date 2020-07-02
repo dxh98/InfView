@@ -1,18 +1,20 @@
 <template>
   <div class="videoplay">
-    <van-nav-bar :title="this.name" left-arrow @click-left="onClickLeft" />
-    <iframe
-      class="playwindow"
-      width="100%"
-      height="100%"
-      allowfullscreen="true"
-      scrolling="no"
-      frameborder="0"
-      border="0"
-      marginwidth="0"
-      marginheight="0"
-      :src="this.playUrl"
-    ></iframe>
+    <div class="videoplaybar">
+      <div class="playwindowbar" :style="styleObj">
+        <iframe
+          class="playwindow"
+          width="100%"
+          height="100%"
+          scrolling="no"
+          frameborder="0"
+          border="0"
+          marginwidth="0"
+          marginheight="0"
+          :src="this.playUrl"
+        ></iframe>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -27,7 +29,11 @@ export default {
       playUrl: "",
       historyList: [],
       isplayed: false,
-      isplayedindex: ""
+      isplayedindex: "",
+      conW:'',
+      conH:'',
+      transform:"",
+      styleObj:""
     };
   },
   components: {},
@@ -35,6 +41,13 @@ export default {
     onClickLeft() {
       this.$router.go(-1);
     }
+  },
+  mounted(){
+    this.conW = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+    this.conH = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+    this.transform = "rotate(90deg) translate("+((this.conH-this.conW)/2)+"px,"+((this.conH-this.conW)/2)+"px)"
+    this.styleObj = {"width":this.conW+"px","height":this.conH+"px","position":"absolute","transform":this.transform,"width":this.conH+"px","height":this.conW+"px", }
+    console.log(this.styleObj)
   },
   created() {
     this.name = this.$route.query.name;
@@ -89,8 +102,14 @@ export default {
   width: 100%;
   height: 100%;
 }
+.videoplaybar {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 0px;
+}
 .playwindow {
   width: 100%;
-  height: 50%;
+  height: 100%;
 }
 </style>
