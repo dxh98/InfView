@@ -1,16 +1,27 @@
 <template>
   <div class="moviedetail">
-    <van-nav-bar fixed placeholder class="topbar" title="详情" left-arrow @click-left="onClickLeft" />
+    <van-nav-bar
+      fixed
+      placeholder
+      class="topbar"
+      title="详情"
+      left-arrow
+      @click-left="onClickLeft"
+    />
     <!-- 带背景颜色的部分 -->
     <div class="moviedetail-main">
       <div class="moviedetail-top">
         <img :src="this.moviedata.coverImage" alt />
         <div class="movieinfo">
           <h1>{{ this.moviedata.name }}</h1>
-          <span v-for="item in this.moviedata.mainActors" :key="item.index">{{ item }}&nbsp;/&nbsp;</span>
+          <span v-for="item in this.moviedata.mainActors" :key="item.index"
+            >{{ item }}&nbsp;/&nbsp;</span
+          >
           <span>{{ this.moviedata.releaseTime }}上映</span>
           <h1>
-            <span v-for="item in this.moviedata.category" :key="item.index">{{ item }}&nbsp;/&nbsp;</span>
+            <span v-for="item in this.moviedata.category" :key="item.index"
+              >{{ item }}&nbsp;/&nbsp;</span
+            >
             <span>{{ this.moviedata.views }}次观看</span>
           </h1>
           <h1 class="duration">时长&nbsp;{{ this.moviedata.duration }}</h1>
@@ -29,14 +40,29 @@
         </div>
       </div>
       <div class="action">
-        <van-button hairline icon="play-circle-o" color="#841703" @click="toPlay">立即播放</van-button>
-        <van-button @click="favmovie" hairline :icon="this.icons" color="#841703">{{this.favtext}}</van-button>
+        <van-button
+          hairline
+          icon="play-circle-o"
+          color="#841703"
+          @click="toPlay"
+          >立即播放</van-button
+        >
+        <van-button
+          @click="favmovie"
+          hairline
+          :icon="this.icons"
+          color="#841703"
+          >{{ this.favtext }}</van-button
+        >
       </div>
     </div>
 
     <!-- 剧情简介 -->
     <h1>剧情简介</h1>
-    <h1>{{ this.moviedata.desc }}</h1>
+    <!-- <h1>{{ this.moviedata.desc }}</h1> -->
+    <h1>
+      <Unfold :data="this.moviedata.desc" maxLength="100" />
+    </h1>
   </div>
 </template>
 
@@ -44,6 +70,7 @@
 import { getOneMovie } from "../service/Movies";
 import { put, get } from "@/utils/request.js";
 import { isLogined, getToken } from "@/utils/auth";
+import Unfold from '@/components/Unfold.vue'
 export default {
   name: "MovieDetail",
   data() {
@@ -61,7 +88,9 @@ export default {
       isLogined: false
     };
   },
-  components: {},
+  components: {
+    Unfold
+  },
   methods: {
     onClickLeft() {
       this.$router.go(-1);
