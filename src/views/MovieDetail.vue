@@ -57,7 +57,8 @@ export default {
       score: 0,
       scorenumber: 0,
       favList: [],
-      spliceIndex: ""
+      spliceIndex: "",
+      isLogined: false
     };
   },
   components: {},
@@ -75,38 +76,51 @@ export default {
         }
       });
     },
-    async favmovie() {
-      // 首先判断是否已经收藏
-      if (!this.isfaved) {
-        const favindex = { id: this.moviedata._id };
-        this.favList.unshift(favindex);
-        put("/api/v1/userinfo/update_info", {
-          favList: this.favList
-        }).then(res => {
-          if ((res.code = 1)) {
-            this.icons = "like";
-            this.favtext = "已经收藏";
-            this.isfaved = true;
-            this.$toast({
-              message: "收藏成功",
-              icon: "checked"
-            });
-          }
-        });
-      } else {
-        this.favList.splice(this.spliceIndex, 1);
-        put("/api/v1/userinfo/update_info", {
-          favList: this.favList
-        }).then(res => {
-          this.icons = "like-o";
-          this.favtext = "立即收藏";
-          this.isfaved = false;
-          this.$toast({
-            message: "取消收藏",
-            icon: "warning"
+    favmovie() {
+      if (this.isLogined) {
+        // 已登录的状态
+        if (!this.isfaved) {
+          const favindex = { id: this.moviedata._id };
+          this.favList.unshift(favindex);
+          put("/api/v1/userinfo/update_info", {
+            favList: this.favList
+          }).then(res => {
+            if ((res.code = 1)) {
+              this.icons = "like";
+              this.favtext = "已经收藏";
+              this.isfaved = true;
+              this.$toast({
+                message: "收藏成功",
+                icon: "checked"
+              });
+            }
           });
-        });
+        } else {
+          this.favList.splice(this.spliceIndex, 1);
+          put("/api/v1/userinfo/update_info", {
+            favList: this.favList
+          }).then(res => {
+            this.icons = "like-o";
+            this.favtext = "立即收藏";
+            this.isfaved = false;
+            this.$toast({
+              message: "取消收藏",
+              icon: "warning"
+            });
+          });
+        }
+      } else {
+        // 未登录的状态
+        this.$dialog
+          .confirm({
+            message: "您还未登录，无法收藏，是否前往登录？"
+          })
+          .then(() => {
+            this.$router.push({ name: "Login" });
+          })
+          .catch(() => {});
       }
+      // 判断是否已经收藏
     }
   },
   async created() {
@@ -116,19 +130,25 @@ export default {
       this.score = res.data.data.score.toFixed(1);
       this.scorenumber = Math.ceil((res.data.data.views / 3) * 2);
     });
-    get("/api/v1/userinfo").then(res => {
-      this.favList = res.data.data.favList;
-      for (let i = 0; i < res.data.data.favList.length; i++) {
-        const id = res.data.data.favList[i].id;
-        if (id.indexOf(this.moviedata._id) == -1) {
-        } else {
-          this.spliceIndex = i;
-          this.isfaved = true;
-          this.icons = "like";
-          this.favtext = "已经收藏";
+    if (isLogined()) {
+      // 已经登录，继续执行
+      this.isLogined = true;
+      get("/api/v1/userinfo").then(res => {
+        this.favList = res.data.data.favList;
+        for (let i = 0; i < res.data.data.favList.length; i++) {
+          const id = res.data.data.favList[i].id;
+          if (id.indexOf(this.moviedata._id) == -1) {
+          } else {
+            this.spliceIndex = i;
+            this.isfaved = true;
+            this.icons = "like";
+            this.favtext = "已经收藏";
+          }
         }
-      }
-    });
+      });
+    } else {
+      // 未登录
+    }
   }
 };
 </script>
